@@ -1,0 +1,2475 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jurnal Wali Kelas - Data Siswa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen font-sans">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 text-center mb-2">📚 Jurnal Wali Kelas</h1>
+            <p class="text-gray-600 text-center">Sistem Manajemen Data Siswa</p>
+        </div>
+
+        <!-- Form Input -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">➕ Tambah Data Siswa</h2>
+            <form id="studentForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">NISN</label>
+                    <input type="text" id="nisn" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="Masukkan NISN">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Nama Siswa</label>
+                    <input type="text" id="nama" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="Masukkan nama lengkap">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Jenis Kelamin</label>
+                    <select id="jenisKelamin" required 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="">Pilih jenis kelamin</option>
+                        <option value="Laki-laki">Laki-laki</option>
+                        <option value="Perempuan">Perempuan</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Lahir</label>
+                    <input type="date" id="tanggalLahir" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Agama</label>
+                    <select id="agama" required 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="">Pilih agama</option>
+                        <option value="Islam">Islam</option>
+                        <option value="Kristen">Kristen</option>
+                        <option value="Katolik">Katolik</option>
+                        <option value="Hindu">Hindu</option>
+                        <option value="Buddha">Buddha</option>
+                        <option value="Konghucu">Konghucu</option>
+                    </select>
+                </div>
+                
+                <div class="md:col-span-2">
+                    <button type="submit" 
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-md transition duration-200 transform hover:scale-105">
+                        💾 Simpan Data Siswa
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Form Keadaan Siswa -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">📊 Keadaan Siswa</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">No.</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Uraian</th>
+                            <th class="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">Laki-laki</th>
+                            <th class="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">Perempuan</th>
+                            <th class="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">Jumlah</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Ket</th>
+                        </tr>
+                    </thead>
+                    <tbody id="keadaanSiswaTable">
+                        <tr class="bg-blue-50">
+                            <td class="border border-gray-300 px-4 py-3 font-semibold">1</td>
+                            <td class="border border-gray-300 px-4 py-3 font-semibold">Data Siswa</td>
+                            <td class="border border-gray-300 px-4 py-3 text-center font-semibold" id="dataSiswaL">0</td>
+                            <td class="border border-gray-300 px-4 py-3 text-center font-semibold" id="dataSiswaP">0</td>
+                            <td class="border border-gray-300 px-4 py-3 text-center font-semibold" id="dataSiswaTotal">0</td>
+                            <td class="border border-gray-300 px-4 py-3">-</td>
+                        </tr>
+                        <tr class="bg-gray-50">
+                            <td class="border border-gray-300 px-4 py-3 font-semibold" rowspan="3">2</td>
+                            <td class="border border-gray-300 px-4 py-3 font-semibold">Mutasi</td>
+                            <td class="border border-gray-300 px-4 py-3"></td>
+                            <td class="border border-gray-300 px-4 py-3"></td>
+                            <td class="border border-gray-300 px-4 py-3"></td>
+                            <td class="border border-gray-300 px-4 py-3"></td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-3 pl-8">a). Mutasi Masuk</td>
+                            <td class="border border-gray-300 px-4 py-3 text-center">
+                                <input type="number" id="mutasiMasukL" min="0" value="0" class="w-16 text-center border rounded px-2 py-1">
+                            </td>
+                            <td class="border border-gray-300 px-4 py-3 text-center">
+                                <input type="number" id="mutasiMasukP" min="0" value="0" class="w-16 text-center border rounded px-2 py-1">
+                            </td>
+                            <td class="border border-gray-300 px-4 py-3 text-center font-semibold" id="mutasiMasukTotal">0</td>
+                            <td class="border border-gray-300 px-4 py-3">
+                                <input type="text" id="mutasiMasukKet" placeholder="Keterangan" class="w-full border rounded px-2 py-1">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-3 pl-8">b). Mutasi Keluar</td>
+                            <td class="border border-gray-300 px-4 py-3 text-center">
+                                <input type="number" id="mutasiKeluarL" min="0" value="0" class="w-16 text-center border rounded px-2 py-1">
+                            </td>
+                            <td class="border border-gray-300 px-4 py-3 text-center">
+                                <input type="number" id="mutasiKeluarP" min="0" value="0" class="w-16 text-center border rounded px-2 py-1">
+                            </td>
+                            <td class="border border-gray-300 px-4 py-3 text-center font-semibold" id="mutasiKeluarTotal">0</td>
+                            <td class="border border-gray-300 px-4 py-3">
+                                <input type="text" id="mutasiKeluarKet" placeholder="Keterangan" class="w-full border rounded px-2 py-1">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-3"></td>
+                            <td class="border border-gray-300 px-4 py-3 pl-8">c). Mundur Diri</td>
+                            <td class="border border-gray-300 px-4 py-3 text-center">
+                                <input type="number" id="mundurDiriL" min="0" value="0" class="w-16 text-center border rounded px-2 py-1">
+                            </td>
+                            <td class="border border-gray-300 px-4 py-3 text-center">
+                                <input type="number" id="mundurDiriP" min="0" value="0" class="w-16 text-center border rounded px-2 py-1">
+                            </td>
+                            <td class="border border-gray-300 px-4 py-3 text-center font-semibold" id="mundurDiriTotal">0</td>
+                            <td class="border border-gray-300 px-4 py-3">
+                                <input type="text" id="mundurDiriKet" placeholder="Keterangan" class="w-full border rounded px-2 py-1">
+                            </td>
+                        </tr>
+                        <tr class="bg-gray-50">
+                            <td class="border border-gray-300 px-4 py-3 font-semibold" rowspan="2">3</td>
+                            <td class="border border-gray-300 px-4 py-3 font-semibold">Agama</td>
+                            <td class="border border-gray-300 px-4 py-3"></td>
+                            <td class="border border-gray-300 px-4 py-3"></td>
+                            <td class="border border-gray-300 px-4 py-3"></td>
+                            <td class="border border-gray-300 px-4 py-3"></td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-3 pl-8">a). Islam</td>
+                            <td class="border border-gray-300 px-4 py-3 text-center font-semibold" id="islamL">0</td>
+                            <td class="border border-gray-300 px-4 py-3 text-center font-semibold" id="islamP">0</td>
+                            <td class="border border-gray-300 px-4 py-3 text-center font-semibold" id="islamTotal">0</td>
+                            <td class="border border-gray-300 px-4 py-3">Otomatis dari data siswa</td>
+                        </tr>
+                        <tr>
+                            <td class="border border-gray-300 px-4 py-3"></td>
+                            <td class="border border-gray-300 px-4 py-3 pl-8">b). Non Muslim</td>
+                            <td class="border border-gray-300 px-4 py-3 text-center font-semibold" id="nonMuslimL">0</td>
+                            <td class="border border-gray-300 px-4 py-3 text-center font-semibold" id="nonMuslimP">0</td>
+                            <td class="border border-gray-300 px-4 py-3 text-center font-semibold" id="nonMuslimTotal">0</td>
+                            <td class="border border-gray-300 px-4 py-3">Otomatis dari data siswa</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="mt-4">
+                <button onclick="saveKeadaanSiswa()" 
+                        class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-md transition duration-200">
+                    💾 Simpan Data Keadaan Siswa
+                </button>
+            </div>
+        </div>
+
+        <!-- Form Siswa Pindah -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">🔄 Nama Siswa Pindah Masuk & Keluar/Mengundurkan Diri</h2>
+            
+            <!-- Form Input Siswa Pindah -->
+            <form id="pindahForm" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Nama Siswa</label>
+                    <input type="text" id="namaPindah" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="Masukkan nama siswa">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Pindah/Mundur</label>
+                    <input type="date" id="tanggalPindah" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Alasan</label>
+                    <select id="alasanPindah" required 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="">Pilih alasan</option>
+                        <option value="Pindah Masuk">Pindah Masuk</option>
+                        <option value="Pindah Keluar">Pindah Keluar</option>
+                        <option value="Mengundurkan Diri">Mengundurkan Diri</option>
+                        <option value="Lulus">Lulus</option>
+                        <option value="Lainnya">Lainnya</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Sekolah Tujuan/Asal</label>
+                    <input type="text" id="sekolahTujuan" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="Nama sekolah tujuan/asal">
+                </div>
+                
+                <div class="md:col-span-2">
+                    <button type="submit" 
+                            class="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-3 px-6 rounded-md transition duration-200 transform hover:scale-105">
+                        📝 Tambah Data Pindah
+                    </button>
+                </div>
+            </form>
+            
+            <!-- Tabel Data Siswa Pindah -->
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">No.</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Nama Siswa</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Tanggal Pindah/Mundur</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Alasan</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Sekolah Tujuan</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pindahTableBody">
+                        <!-- Data akan ditampilkan di sini -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="emptyStatePindah" class="text-center py-8 text-gray-500">
+                📋 Belum ada data siswa pindah. Silakan tambahkan data baru.
+            </div>
+        </div>
+
+        <!-- Form Jumlah Siswa Keseluruhan -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">📊 Jumlah Siswa Keseluruhan</h2>
+            
+            <!-- Statistik Utama -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-4 text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-blue-100 text-sm">Total Siswa</p>
+                            <p class="text-2xl font-bold" id="totalSiswaKeseluruhan">0</p>
+                        </div>
+                        <div class="text-3xl opacity-80">👥</div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-green-500 to-green-600 rounded-lg p-4 text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-green-100 text-sm">Laki-laki</p>
+                            <p class="text-2xl font-bold" id="totalLakiLaki">0</p>
+                        </div>
+                        <div class="text-3xl opacity-80">👦</div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-pink-500 to-pink-600 rounded-lg p-4 text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-pink-100 text-sm">Perempuan</p>
+                            <p class="text-2xl font-bold" id="totalPerempuan">0</p>
+                        </div>
+                        <div class="text-3xl opacity-80">👧</div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-4 text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-purple-100 text-sm">Rata-rata Usia</p>
+                            <p class="text-2xl font-bold" id="rataRataUsia">0</p>
+                        </div>
+                        <div class="text-3xl opacity-80">🎂</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tabel Detail Jumlah Siswa -->
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Kategori</th>
+                            <th class="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">Laki-laki</th>
+                            <th class="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">Perempuan</th>
+                            <th class="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">Total</th>
+                            <th class="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">Persentase</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-blue-50">
+                            <td class="border border-gray-300 px-4 py-3 font-semibold">
+                                <span class="inline-flex items-center">
+                                    👥 Total Siswa Aktif
+                                </span>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-3 text-center font-semibold text-blue-600" id="detailLakiLaki">0</td>
+                            <td class="border border-gray-300 px-4 py-3 text-center font-semibold text-pink-600" id="detailPerempuan">0</td>
+                            <td class="border border-gray-300 px-4 py-3 text-center font-semibold text-gray-800" id="detailTotal">0</td>
+                            <td class="border border-gray-300 px-4 py-3 text-center font-semibold text-green-600">100%</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="border border-gray-300 px-4 py-3">
+                                <span class="inline-flex items-center">
+                                    ☪️ Beragama Islam
+                                </span>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-3 text-center" id="detailIslamL">0</td>
+                            <td class="border border-gray-300 px-4 py-3 text-center" id="detailIslamP">0</td>
+                            <td class="border border-gray-300 px-4 py-3 text-center font-semibold" id="detailIslamTotal">0</td>
+                            <td class="border border-gray-300 px-4 py-3 text-center" id="detailIslamPersen">0%</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="border border-gray-300 px-4 py-3">
+                                <span class="inline-flex items-center">
+                                    ✝️ Non Muslim
+                                </span>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-3 text-center" id="detailNonMuslimL">0</td>
+                            <td class="border border-gray-300 px-4 py-3 text-center" id="detailNonMuslimP">0</td>
+                            <td class="border border-gray-300 px-4 py-3 text-center font-semibold" id="detailNonMuslimTotal">0</td>
+                            <td class="border border-gray-300 px-4 py-3 text-center" id="detailNonMuslimPersen">0%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Grafik Sederhana dengan CSS -->
+            <div class="mt-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-3">📈 Distribusi Siswa</h3>
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-sm font-medium text-gray-700">👦 Laki-laki</span>
+                            <span class="text-sm text-gray-600" id="persenLakiLaki">0%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="bg-blue-500 h-3 rounded-full transition-all duration-500" id="barLakiLaki" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-sm font-medium text-gray-700">👧 Perempuan</span>
+                            <span class="text-sm text-gray-600" id="persenPerempuan">0%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-3">
+                            <div class="bg-pink-500 h-3 rounded-full transition-all duration-500" id="barPerempuan" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tombol Export -->
+            <div class="mt-6 flex flex-wrap gap-3">
+                <button onclick="exportSummary()" 
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-6 rounded-md transition duration-200">
+                    📊 Export Ringkasan
+                </button>
+                <button onclick="refreshStatistics()" 
+                        class="bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-6 rounded-md transition duration-200">
+                    🔄 Refresh Data
+                </button>
+            </div>
+        </div>
+
+        <!-- Form Siswa yang Sakit/Izin -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">🏥 Siswa yang Sakit/Izin</h2>
+            
+            <!-- Form Input Siswa Sakit/Izin -->
+            <form id="sakitForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Nama Siswa</label>
+                    <select id="namaSiswa" required 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="">Pilih siswa</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Jenis</label>
+                    <select id="jenisSakit" required 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="">Pilih jenis</option>
+                        <option value="Sakit">🤒 Sakit</option>
+                        <option value="Izin">📝 Izin</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Sakitnya/Alasan Izin</label>
+                    <input type="text" id="sakitnya" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="Demam, flu, keperluan keluarga, dll">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Mulai</label>
+                    <input type="date" id="tanggalMulai" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Lamanya (hari)</label>
+                    <input type="number" id="lamanya" min="1" max="30" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="Jumlah hari">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Penanganan</label>
+                    <input type="text" id="penanganan" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="Istirahat, obat, rujuk dokter, dll">
+                </div>
+                
+                <div class="lg:col-span-3">
+                    <button type="submit" 
+                            class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-6 rounded-md transition duration-200 transform hover:scale-105">
+                        🏥 Tambah Data Sakit/Izin
+                    </button>
+                </div>
+            </form>
+            
+            <!-- Filter dan Pencarian -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Filter Jenis</label>
+                    <select id="filterJenis" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="">Semua</option>
+                        <option value="Sakit">🤒 Sakit</option>
+                        <option value="Izin">📝 Izin</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Filter Bulan</label>
+                    <select id="filterBulan" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="">Semua Bulan</option>
+                        <option value="01">Januari</option>
+                        <option value="02">Februari</option>
+                        <option value="03">Maret</option>
+                        <option value="04">April</option>
+                        <option value="05">Mei</option>
+                        <option value="06">Juni</option>
+                        <option value="07">Juli</option>
+                        <option value="08">Agustus</option>
+                        <option value="09">September</option>
+                        <option value="10">Oktober</option>
+                        <option value="11">November</option>
+                        <option value="12">Desember</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Cari Nama</label>
+                    <input type="text" id="searchNama" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="Ketik nama siswa...">
+                </div>
+            </div>
+            
+            <!-- Statistik Ringkas -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-gradient-to-r from-red-500 to-red-600 rounded-lg p-4 text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-red-100 text-sm">Total Sakit</p>
+                            <p class="text-2xl font-bold" id="totalSakit">0</p>
+                        </div>
+                        <div class="text-3xl opacity-80">🤒</div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg p-4 text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-blue-100 text-sm">Total Izin</p>
+                            <p class="text-2xl font-bold" id="totalIzin">0</p>
+                        </div>
+                        <div class="text-3xl opacity-80">📝</div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-lg p-4 text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-yellow-100 text-sm">Rata-rata Hari</p>
+                            <p class="text-2xl font-bold" id="rataHari">0</p>
+                        </div>
+                        <div class="text-3xl opacity-80">📅</div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-4 text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-purple-100 text-sm">Bulan Ini</p>
+                            <p class="text-2xl font-bold" id="bulanIni">0</p>
+                        </div>
+                        <div class="text-3xl opacity-80">📊</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tabel Data Siswa Sakit/Izin -->
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">No.</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Nama Siswa</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Jenis</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Sakitnya/Alasan</th>
+                            <th class="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">Tanggal Mulai</th>
+                            <th class="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">Lamanya</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Penanganan</th>
+                            <th class="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">Status</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sakitTableBody">
+                        <!-- Data akan ditampilkan di sini -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="emptyStateSakit" class="text-center py-8 text-gray-500">
+                🏥 Belum ada data siswa sakit/izin. Silakan tambahkan data baru.
+            </div>
+            
+            <!-- Tombol Export -->
+            <div class="mt-6 flex flex-wrap gap-3">
+                <button onclick="exportSakitData()" 
+                        class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-md transition duration-200">
+                    📊 Export Data Sakit/Izin
+                </button>
+                <button onclick="clearAllSakitData()" 
+                        class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-6 rounded-md transition duration-200">
+                    🗑️ Hapus Semua Data
+                </button>
+            </div>
+        </div>
+
+        <!-- Form Siswa yang Alpa -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">❌ Siswa yang Alpa</h2>
+            
+            <!-- Form Input Siswa Alpa -->
+            <form id="alpaForm" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Nama Siswa</label>
+                    <select id="namaSiswaAlpa" required 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <option value="">Pilih siswa</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Alpa</label>
+                    <input type="date" id="tanggalAlpa" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Lamanya (hari)</label>
+                    <input type="number" id="lamanyaAlpa" min="1" max="30" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                           placeholder="Jumlah hari">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Penanganan</label>
+                    <input type="text" id="penangananAlpa" required 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                           placeholder="Teguran, panggil ortu, dll">
+                </div>
+                
+                <div class="lg:col-span-4">
+                    <button type="submit" 
+                            class="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-6 rounded-md transition duration-200 transform hover:scale-105">
+                        ❌ Tambah Data Alpa
+                    </button>
+                </div>
+            </form>
+            
+            <!-- Filter dan Pencarian -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Filter Bulan</label>
+                    <select id="filterBulanAlpa" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <option value="">Semua Bulan</option>
+                        <option value="01">Januari</option>
+                        <option value="02">Februari</option>
+                        <option value="03">Maret</option>
+                        <option value="04">April</option>
+                        <option value="05">Mei</option>
+                        <option value="06">Juni</option>
+                        <option value="07">Juli</option>
+                        <option value="08">Agustus</option>
+                        <option value="09">September</option>
+                        <option value="10">Oktober</option>
+                        <option value="11">November</option>
+                        <option value="12">Desember</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Cari Nama</label>
+                    <input type="text" id="searchNamaAlpa" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                           placeholder="Ketik nama siswa...">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Urutkan</label>
+                    <select id="sortAlpa" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent">
+                        <option value="terbaru">Terbaru</option>
+                        <option value="terlama">Terlama</option>
+                        <option value="nama">Nama A-Z</option>
+                        <option value="lamanya">Lamanya</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Statistik Ringkas -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-gradient-to-r from-red-500 to-red-600 rounded-lg p-4 text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-red-100 text-sm">Total Alpa</p>
+                            <p class="text-2xl font-bold" id="totalAlpaCount">0</p>
+                        </div>
+                        <div class="text-3xl opacity-80">❌</div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg p-4 text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-orange-100 text-sm">Siswa Terlibat</p>
+                            <p class="text-2xl font-bold" id="siswaTerlibat">0</p>
+                        </div>
+                        <div class="text-3xl opacity-80">👥</div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-lg p-4 text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-yellow-100 text-sm">Rata-rata Hari</p>
+                            <p class="text-2xl font-bold" id="rataHariAlpa">0</p>
+                        </div>
+                        <div class="text-3xl opacity-80">📅</div>
+                    </div>
+                </div>
+                
+                <div class="bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg p-4 text-white">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-purple-100 text-sm">Bulan Ini</p>
+                            <p class="text-2xl font-bold" id="bulanIniAlpa">0</p>
+                        </div>
+                        <div class="text-3xl opacity-80">📊</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tabel Data Siswa Alpa -->
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">No.</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Nama Siswa</th>
+                            <th class="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">Tanggal Alpa</th>
+                            <th class="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">Lamanya</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Penanganan</th>
+                            <th class="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">Status</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="alpaTableBody">
+                        <!-- Data akan ditampilkan di sini -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="emptyStateAlpa" class="text-center py-8 text-gray-500">
+                ❌ Belum ada data siswa alpa. Silakan tambahkan data baru.
+            </div>
+            
+            <!-- Tombol Export -->
+            <div class="mt-6 flex flex-wrap gap-3">
+                <button onclick="exportAlpaData()" 
+                        class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-md transition duration-200">
+                    📊 Export Data Alpa
+                </button>
+                <button onclick="clearAllAlpaData()" 
+                        class="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-6 rounded-md transition duration-200">
+                    🗑️ Hapus Semua Data
+                </button>
+                <button onclick="generateAlpaReport()" 
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md transition duration-200">
+                    📋 Laporan Alpa
+                </button>
+            </div>
+        </div>
+
+        <!-- Form Rekap Absensi Siswa -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">📊 Rekap Absensi Siswa</h2>
+            
+            <!-- Pilih Bulan dan Minggu -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Bulan</label>
+                    <select id="bulanAbsensi" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="01">Januari</option>
+                        <option value="02">Februari</option>
+                        <option value="03">Maret</option>
+                        <option value="04">April</option>
+                        <option value="05">Mei</option>
+                        <option value="06">Juni</option>
+                        <option value="07">Juli</option>
+                        <option value="08">Agustus</option>
+                        <option value="09">September</option>
+                        <option value="10">Oktober</option>
+                        <option value="11">November</option>
+                        <option value="12">Desember</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Tahun</label>
+                    <select id="tahunAbsensi" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Minggu</label>
+                    <select id="mingguAbsensi" 
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option value="1">Minggu Pertama</option>
+                        <option value="2">Minggu Kedua</option>
+                        <option value="3">Minggu Ketiga</option>
+                        <option value="4">Minggu Keempat</option>
+                        <option value="5">Minggu Kelima</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Tabel Rekap Absensi -->
+            <div class="overflow-x-auto mb-4">
+                <table class="w-full border-collapse border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">No</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Keterangan</th>
+                            <th class="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">Jumlah</th>
+                            <th class="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">Presentasi (%)</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Ket</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="hover:bg-gray-50">
+                            <td class="border border-gray-300 px-4 py-3 font-semibold">1</td>
+                            <td class="border border-gray-300 px-4 py-3">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                    ✅ Hadir
+                                </span>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-3 text-center">
+                                <input type="number" id="hadirJumlah" min="0" value="0" 
+                                       class="w-20 text-center border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </td>
+                            <td class="border border-gray-300 px-4 py-3 text-center font-semibold" id="hadirPersen">0%</td>
+                            <td class="border border-gray-300 px-4 py-3">
+                                <input type="text" id="hadirKet" placeholder="Keterangan" 
+                                       class="w-full border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="border border-gray-300 px-4 py-3 font-semibold">2</td>
+                            <td class="border border-gray-300 px-4 py-3">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    🤒 Sakit
+                                </span>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-3 text-center">
+                                <input type="number" id="sakitJumlah" min="0" value="0" 
+                                       class="w-20 text-center border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </td>
+                            <td class="border border-gray-300 px-4 py-3 text-center font-semibold" id="sakitPersen">0%</td>
+                            <td class="border border-gray-300 px-4 py-3">
+                                <input type="text" id="sakitKet" placeholder="Keterangan" 
+                                       class="w-full border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="border border-gray-300 px-4 py-3 font-semibold">3</td>
+                            <td class="border border-gray-300 px-4 py-3">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                    📝 Izin
+                                </span>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-3 text-center">
+                                <input type="number" id="izinJumlah" min="0" value="0" 
+                                       class="w-20 text-center border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </td>
+                            <td class="border border-gray-300 px-4 py-3 text-center font-semibold" id="izinPersen">0%</td>
+                            <td class="border border-gray-300 px-4 py-3">
+                                <input type="text" id="izinKet" placeholder="Keterangan" 
+                                       class="w-full border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="border border-gray-300 px-4 py-3 font-semibold">4</td>
+                            <td class="border border-gray-300 px-4 py-3">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                    ❌ Tanpa Keterangan
+                                </span>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-3 text-center">
+                                <input type="number" id="alfaJumlah" min="0" value="0" 
+                                       class="w-20 text-center border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </td>
+                            <td class="border border-gray-300 px-4 py-3 text-center font-semibold" id="alfaPersen">0%</td>
+                            <td class="border border-gray-300 px-4 py-3">
+                                <input type="text" id="alfaKet" placeholder="Keterangan" 
+                                       class="w-full border rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </td>
+                        </tr>
+                        <tr class="bg-gray-100 font-semibold">
+                            <td class="border border-gray-300 px-4 py-3"></td>
+                            <td class="border border-gray-300 px-4 py-3">
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-200 text-gray-800">
+                                    📊 Jumlah
+                                </span>
+                            </td>
+                            <td class="border border-gray-300 px-4 py-3 text-center" id="totalJumlah">0</td>
+                            <td class="border border-gray-300 px-4 py-3 text-center">100%</td>
+                            <td class="border border-gray-300 px-4 py-3">Total keseluruhan</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Tombol Aksi -->
+            <div class="flex flex-wrap gap-3">
+                <button onclick="saveAbsensi()" 
+                        class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-md transition duration-200">
+                    💾 Simpan Rekap Absensi
+                </button>
+                <button onclick="resetAbsensi()" 
+                        class="bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-6 rounded-md transition duration-200">
+                    🔄 Reset Data
+                </button>
+                <button onclick="loadAbsensi()" 
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md transition duration-200">
+                    📂 Muat Data
+                </button>
+            </div>
+            
+            <!-- Info Periode -->
+            <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p class="text-blue-800 text-sm">
+                    <span class="font-medium">📅 Periode:</span> 
+                    <span id="infoPeriode">Januari 2024 - Minggu Pertama</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- Tabel Data Siswa -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">📋 Data Siswa</h2>
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse border border-gray-300">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">No.</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">NISN</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Nama Siswa</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Jenis Kelamin</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Tanggal Lahir</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Usia</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Agama</th>
+                            <th class="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody">
+                        <!-- Data akan ditampilkan di sini -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="emptyState" class="text-center py-8 text-gray-500">
+                📝 Belum ada data siswa. Silakan tambahkan data siswa baru.
+            </div>
+        </div>
+
+        <!-- Konfigurasi Google Sheets -->
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-4">🔗 Konfigurasi Google Sheets</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">URL Google Sheets</label>
+                    <input type="url" id="googleSheetsUrl" 
+                           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           placeholder="https://docs.google.com/spreadsheets/d/...">
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Status Koneksi</label>
+                    <div class="flex items-center">
+                        <span id="connectionStatus" class="inline-flex items-center px-3 py-2 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                            ❌ Tidak Terhubung
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap gap-3 mb-4">
+                <button onclick="testConnection()" 
+                        class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md transition duration-200">
+                    🔍 Test Koneksi
+                </button>
+                <button onclick="saveGoogleSheetsConfig()" 
+                        class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-md transition duration-200">
+                    💾 Simpan Konfigurasi
+                </button>
+                <button onclick="syncAllData()" 
+                        class="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-6 rounded-md transition duration-200">
+                    🔄 Sinkronisasi Semua Data
+                </button>
+            </div>
+            
+            <!-- Panduan Setup -->
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <h3 class="text-blue-800 font-medium mb-2">📋 Panduan Setup Google Sheets:</h3>
+                <ol class="text-blue-700 text-sm space-y-1 list-decimal list-inside">
+                    <li>Buka Google Sheets dan buat spreadsheet baru</li>
+                    <li>Buat sheet dengan nama: "DataSiswa", "DataPindah", "DataSakit", "DataAlpa", "DataAbsensi"</li>
+                    <li>Klik "Extensions" → "Apps Script"</li>
+                    <li>Salin kode Apps Script yang disediakan di bawah</li>
+                    <li>Deploy sebagai Web App dengan akses "Anyone"</li>
+                    <li>Masukkan URL Web App ke field di atas</li>
+                </ol>
+            </div>
+            
+            <!-- Apps Script Code -->
+            <div class="mt-4">
+                <h3 class="text-gray-800 font-medium mb-2">📝 Kode Apps Script:</h3>
+                <div class="bg-gray-100 border rounded-lg p-4 overflow-x-auto">
+                    <pre class="text-sm text-gray-800" id="appsScriptCode">function doPost(e) {
+  try {
+    const data = JSON.parse(e.postData.contents);
+    const action = data.action;
+    const sheetName = data.sheetName;
+    const rowData = data.data;
+    
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    let sheet = ss.getSheetByName(sheetName);
+    
+    // Buat sheet jika belum ada
+    if (!sheet) {
+      sheet = ss.insertSheet(sheetName);
+      
+      // Set header berdasarkan sheet
+      let headers = [];
+      switch(sheetName) {
+        case 'DataSiswa':
+          headers = ['NISN', 'Nama', 'Jenis Kelamin', 'Tanggal Lahir', 'Usia', 'Agama', 'Tanggal Input'];
+          break;
+        case 'DataPindah':
+          headers = ['Nama', 'Tanggal Pindah', 'Alasan', 'Sekolah Tujuan', 'Tanggal Input'];
+          break;
+        case 'DataSakit':
+          headers = ['Nama', 'Jenis', 'Sakitnya/Alasan', 'Tanggal Mulai', 'Lamanya', 'Penanganan', 'Tanggal Input'];
+          break;
+        case 'DataAlpa':
+          headers = ['Nama', 'Tanggal Alpa', 'Lamanya', 'Penanganan', 'Tanggal Input'];
+          break;
+        case 'DataAbsensi':
+          headers = ['Periode', 'Hadir', 'Sakit', 'Izin', 'Alfa', 'Total', 'Tanggal Input'];
+          break;
+      }
+      
+      if (headers.length > 0) {
+        sheet.getRange(1, 1, 1, headers.length).setValues([headers]);
+        sheet.getRange(1, 1, 1, headers.length).setFontWeight('bold');
+      }
+    }
+    
+    if (action === 'add') {
+      sheet.appendRow(rowData);
+    } else if (action === 'sync') {
+      // Clear existing data (except header)
+      if (sheet.getLastRow() > 1) {
+        sheet.getRange(2, 1, sheet.getLastRow() - 1, sheet.getLastColumn()).clear();
+      }
+      
+      // Add all data
+      if (rowData.length > 0) {
+        sheet.getRange(2, 1, rowData.length, rowData[0].length).setValues(rowData);
+      }
+    }
+    
+    return ContentService
+      .createTextOutput(JSON.stringify({success: true, message: 'Data berhasil disimpan'}))
+      .setMimeType(ContentService.MimeType.JSON);
+      
+  } catch (error) {
+    return ContentService
+      .createTextOutput(JSON.stringify({success: false, message: error.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+function doGet(e) {
+  return ContentService
+    .createTextOutput(JSON.stringify({success: true, message: 'Google Sheets API Ready'}))
+    .setMimeType(ContentService.MimeType.JSON);
+}</pre>
+                </div>
+                <button onclick="copyAppsScript()" 
+                        class="mt-2 bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded-md transition duration-200">
+                    📋 Salin Kode
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let students = JSON.parse(localStorage.getItem('studentsData')) || [];
+        let pindahData = JSON.parse(localStorage.getItem('pindahData')) || [];
+        let absensiData = JSON.parse(localStorage.getItem('absensiData')) || {};
+        let sakitData = JSON.parse(localStorage.getItem('sakitData')) || [];
+        let alpaData = JSON.parse(localStorage.getItem('alpaData')) || [];
+        let studentCounter = students.length;
+        let googleSheetsUrl = localStorage.getItem('googleSheetsUrl') || '';
+        let isConnected = false;
+
+        // Fungsi untuk test koneksi Google Sheets
+        async function testConnection() {
+            const url = document.getElementById('googleSheetsUrl').value;
+            if (!url) {
+                showNotification('Masukkan URL Google Sheets terlebih dahulu!', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    if (result.success) {
+                        isConnected = true;
+                        updateConnectionStatus(true);
+                        showNotification('Koneksi berhasil! Google Sheets siap digunakan.', 'success');
+                    } else {
+                        throw new Error('Response tidak valid');
+                    }
+                } else {
+                    throw new Error('Gagal terhubung ke Google Sheets');
+                }
+            } catch (error) {
+                isConnected = false;
+                updateConnectionStatus(false);
+                showNotification('Gagal terhubung ke Google Sheets: ' + error.message, 'error');
+            }
+        }
+        
+        // Fungsi untuk update status koneksi
+        function updateConnectionStatus(connected) {
+            const statusElement = document.getElementById('connectionStatus');
+            if (connected) {
+                statusElement.className = 'inline-flex items-center px-3 py-2 rounded-full text-sm font-medium bg-green-100 text-green-800';
+                statusElement.textContent = '✅ Terhubung';
+            } else {
+                statusElement.className = 'inline-flex items-center px-3 py-2 rounded-full text-sm font-medium bg-red-100 text-red-800';
+                statusElement.textContent = '❌ Tidak Terhubung';
+            }
+        }
+        
+        // Fungsi untuk simpan konfigurasi Google Sheets
+        function saveGoogleSheetsConfig() {
+            const url = document.getElementById('googleSheetsUrl').value;
+            if (!url) {
+                showNotification('Masukkan URL Google Sheets terlebih dahulu!', 'error');
+                return;
+            }
+            
+            googleSheetsUrl = url;
+            localStorage.setItem('googleSheetsUrl', url);
+            showNotification('Konfigurasi Google Sheets berhasil disimpan!', 'success');
+        }
+        
+        // Fungsi untuk kirim data ke Google Sheets
+        async function sendToGoogleSheets(sheetName, data, action = 'add') {
+            if (!googleSheetsUrl || !isConnected) {
+                console.log('Google Sheets tidak terkonfigurasi atau tidak terhubung');
+                return false;
+            }
+            
+            try {
+                const payload = {
+                    action: action,
+                    sheetName: sheetName,
+                    data: data
+                };
+                
+                const response = await fetch(googleSheetsUrl, {
+                    method: 'POST',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload)
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    return result.success;
+                } else {
+                    throw new Error('Gagal mengirim data ke Google Sheets');
+                }
+            } catch (error) {
+                console.error('Error sending to Google Sheets:', error);
+                showNotification('Gagal menyimpan ke Google Sheets: ' + error.message, 'error');
+                return false;
+            }
+        }
+        
+        // Fungsi untuk sinkronisasi semua data
+        async function syncAllData() {
+            if (!googleSheetsUrl) {
+                showNotification('Konfigurasi Google Sheets terlebih dahulu!', 'error');
+                return;
+            }
+            
+            if (!isConnected) {
+                showNotification('Test koneksi terlebih dahulu!', 'error');
+                return;
+            }
+            
+            try {
+                // Sinkronisasi Data Siswa
+                if (students.length > 0) {
+                    const studentRows = students.map(student => [
+                        student.nisn,
+                        student.nama,
+                        student.jenisKelamin,
+                        student.tanggalLahir,
+                        student.usia,
+                        student.agama,
+                        new Date().toISOString()
+                    ]);
+                    await sendToGoogleSheets('DataSiswa', studentRows, 'sync');
+                }
+                
+                // Sinkronisasi Data Pindah
+                if (pindahData.length > 0) {
+                    const pindahRows = pindahData.map(data => [
+                        data.nama,
+                        data.tanggal,
+                        data.alasan,
+                        data.sekolah,
+                        new Date().toISOString()
+                    ]);
+                    await sendToGoogleSheets('DataPindah', pindahRows, 'sync');
+                }
+                
+                // Sinkronisasi Data Sakit
+                if (sakitData.length > 0) {
+                    const sakitRows = sakitData.map(data => [
+                        data.nama,
+                        data.jenis,
+                        data.sakitnya,
+                        data.tanggalMulai,
+                        data.lamanya,
+                        data.penanganan,
+                        data.tanggalInput || new Date().toISOString()
+                    ]);
+                    await sendToGoogleSheets('DataSakit', sakitRows, 'sync');
+                }
+                
+                // Sinkronisasi Data Alpa
+                if (alpaData.length > 0) {
+                    const alpaRows = alpaData.map(data => [
+                        data.nama,
+                        data.tanggalAlpa,
+                        data.lamanya,
+                        data.penanganan,
+                        data.tanggalInput || new Date().toISOString()
+                    ]);
+                    await sendToGoogleSheets('DataAlpa', alpaRows, 'sync');
+                }
+                
+                // Sinkronisasi Data Absensi
+                const absensiRows = [];
+                for (const [key, data] of Object.entries(absensiData)) {
+                    const total = data.hadir.jumlah + data.sakit.jumlah + data.izin.jumlah + data.alfa.jumlah;
+                    absensiRows.push([
+                        key, // Periode
+                        data.hadir.jumlah,
+                        data.sakit.jumlah,
+                        data.izin.jumlah,
+                        data.alfa.jumlah,
+                        total,
+                        new Date().toISOString()
+                    ]);
+                }
+                
+                if (absensiRows.length > 0) {
+                    await sendToGoogleSheets('DataAbsensi', absensiRows, 'sync');
+                }
+                
+                showNotification('Semua data berhasil disinkronisasi ke Google Sheets!', 'success');
+                
+            } catch (error) {
+                showNotification('Gagal sinkronisasi: ' + error.message, 'error');
+            }
+        }
+        
+        // Fungsi untuk salin kode Apps Script
+        function copyAppsScript() {
+            const code = document.getElementById('appsScriptCode').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                showNotification('Kode Apps Script berhasil disalin!', 'success');
+            }).catch(() => {
+                showNotification('Gagal menyalin kode. Salin manual dari kotak di atas.', 'error');
+            });
+        }
+
+        // Fungsi untuk menghitung usia
+        function calculateAge(birthDate) {
+            const today = new Date();
+            const birth = new Date(birthDate);
+            let age = today.getFullYear() - birth.getFullYear();
+            const monthDiff = today.getMonth() - birth.getMonth();
+            
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+                age--;
+            }
+            
+            return age;
+        }
+
+        // Fungsi untuk format tanggal
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('id-ID', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+
+        // Fungsi untuk menampilkan data di tabel
+        function displayStudents() {
+            const tableBody = document.getElementById('studentTableBody');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (students.length === 0) {
+                tableBody.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            
+            tableBody.innerHTML = students.map((student, index) => `
+                <tr class="hover:bg-gray-50">
+                    <td class="border border-gray-300 px-4 py-3">${index + 1}</td>
+                    <td class="border border-gray-300 px-4 py-3">${student.nisn}</td>
+                    <td class="border border-gray-300 px-4 py-3 font-medium">${student.nama}</td>
+                    <td class="border border-gray-300 px-4 py-3">
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                            student.jenisKelamin === 'Laki-laki' 
+                                ? 'bg-blue-100 text-blue-800' 
+                                : 'bg-pink-100 text-pink-800'
+                        }">
+                            ${student.jenisKelamin === 'Laki-laki' ? '👦' : '👧'} ${student.jenisKelamin}
+                        </span>
+                    </td>
+                    <td class="border border-gray-300 px-4 py-3">${formatDate(student.tanggalLahir)}</td>
+                    <td class="border border-gray-300 px-4 py-3">
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            ${student.usia} tahun
+                        </span>
+                    </td>
+                    <td class="border border-gray-300 px-4 py-3">
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                            student.agama === 'Islam' ? 'bg-emerald-100 text-emerald-800' : 'bg-purple-100 text-purple-800'
+                        }">
+                            ${student.agama === 'Islam' ? '☪️' : '✝️'} ${student.agama}
+                        </span>
+                    </td>
+                    <td class="border border-gray-300 px-4 py-3">
+                        <button onclick="deleteStudent(${index})" 
+                                class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition duration-200">
+                            🗑️ Hapus
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Fungsi untuk populate dropdown nama siswa
+        function populateStudentDropdown() {
+            const dropdown = document.getElementById('namaSiswa');
+            dropdown.innerHTML = '<option value="">Pilih siswa</option>';
+            
+            students.forEach(student => {
+                const option = document.createElement('option');
+                option.value = student.nama;
+                option.textContent = `${student.nama} (${student.nisn})`;
+                dropdown.appendChild(option);
+            });
+            
+            // Populate dropdown untuk alpa juga
+            const dropdownAlpa = document.getElementById('namaSiswaAlpa');
+            dropdownAlpa.innerHTML = '<option value="">Pilih siswa</option>';
+            
+            students.forEach(student => {
+                const option = document.createElement('option');
+                option.value = student.nama;
+                option.textContent = `${student.nama} (${student.nisn})`;
+                dropdownAlpa.appendChild(option);
+            });
+        }
+
+        // Fungsi untuk menampilkan data siswa sakit/izin
+        function displaySakitData() {
+            const tableBody = document.getElementById('sakitTableBody');
+            const emptyState = document.getElementById('emptyStateSakit');
+            
+            // Filter data berdasarkan filter yang aktif
+            let filteredData = sakitData;
+            
+            const filterJenis = document.getElementById('filterJenis').value;
+            const filterBulan = document.getElementById('filterBulan').value;
+            const searchNama = document.getElementById('searchNama').value.toLowerCase();
+            
+            if (filterJenis) {
+                filteredData = filteredData.filter(data => data.jenis === filterJenis);
+            }
+            
+            if (filterBulan) {
+                filteredData = filteredData.filter(data => {
+                    const bulanData = data.tanggalMulai.split('-')[1];
+                    return bulanData === filterBulan;
+                });
+            }
+            
+            if (searchNama) {
+                filteredData = filteredData.filter(data => 
+                    data.nama.toLowerCase().includes(searchNama)
+                );
+            }
+            
+            if (filteredData.length === 0) {
+                tableBody.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            
+            tableBody.innerHTML = filteredData.map((data, index) => {
+                const tanggalMulai = new Date(data.tanggalMulai);
+                const tanggalSelesai = new Date(tanggalMulai);
+                tanggalSelesai.setDate(tanggalSelesai.getDate() + parseInt(data.lamanya) - 1);
+                
+                const today = new Date();
+                const isActive = today >= tanggalMulai && today <= tanggalSelesai;
+                const isFinished = today > tanggalSelesai;
+                
+                let statusBadge = '';
+                if (isActive) {
+                    statusBadge = '<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">🔄 Berlangsung</span>';
+                } else if (isFinished) {
+                    statusBadge = '<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">✅ Selesai</span>';
+                } else {
+                    statusBadge = '<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">⏳ Akan Datang</span>';
+                }
+                
+                return `
+                    <tr class="hover:bg-gray-50">
+                        <td class="border border-gray-300 px-4 py-3">${index + 1}</td>
+                        <td class="border border-gray-300 px-4 py-3 font-medium">${data.nama}</td>
+                        <td class="border border-gray-300 px-4 py-3">
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                                data.jenis === 'Sakit' ? 'bg-red-100 text-red-800' : 'bg-blue-100 text-blue-800'
+                            }">
+                                ${data.jenis === 'Sakit' ? '🤒' : '📝'} ${data.jenis}
+                            </span>
+                        </td>
+                        <td class="border border-gray-300 px-4 py-3">${data.sakitnya}</td>
+                        <td class="border border-gray-300 px-4 py-3 text-center">${formatDate(data.tanggalMulai)}</td>
+                        <td class="border border-gray-300 px-4 py-3 text-center">
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                ${data.lamanya} hari
+                            </span>
+                        </td>
+                        <td class="border border-gray-300 px-4 py-3">${data.penanganan}</td>
+                        <td class="border border-gray-300 px-4 py-3 text-center">${statusBadge}</td>
+                        <td class="border border-gray-300 px-4 py-3">
+                            <button onclick="deleteSakitData(${sakitData.indexOf(data)})" 
+                                    class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition duration-200">
+                                🗑️ Hapus
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            updateSakitStatistics();
+        }
+
+        // Fungsi untuk update statistik sakit/izin
+        function updateSakitStatistics() {
+            const totalSakitCount = sakitData.filter(data => data.jenis === 'Sakit').length;
+            const totalIzinCount = sakitData.filter(data => data.jenis === 'Izin').length;
+            
+            document.getElementById('totalSakit').textContent = totalSakitCount;
+            document.getElementById('totalIzin').textContent = totalIzinCount;
+            
+            // Hitung rata-rata hari
+            if (sakitData.length > 0) {
+                const totalHari = sakitData.reduce((sum, data) => sum + parseInt(data.lamanya), 0);
+                const rataRata = Math.round(totalHari / sakitData.length);
+                document.getElementById('rataHari').textContent = rataRata;
+            } else {
+                document.getElementById('rataHari').textContent = '0';
+            }
+            
+            // Hitung data bulan ini
+            const currentMonth = new Date().getMonth() + 1;
+            const currentYear = new Date().getFullYear();
+            const bulanIniCount = sakitData.filter(data => {
+                const dataDate = new Date(data.tanggalMulai);
+                return dataDate.getMonth() + 1 === currentMonth && dataDate.getFullYear() === currentYear;
+            }).length;
+            
+            document.getElementById('bulanIni').textContent = bulanIniCount;
+        }
+
+        // Fungsi untuk menghapus data sakit
+        function deleteSakitData(index) {
+            if (confirm('Apakah Anda yakin ingin menghapus data sakit/izin ini?')) {
+                sakitData.splice(index, 1);
+                localStorage.setItem('sakitData', JSON.stringify(sakitData));
+                displaySakitData();
+                showNotification('Data sakit/izin berhasil dihapus!', 'success');
+            }
+        }
+
+        // Fungsi untuk export data sakit
+        function exportSakitData() {
+            if (sakitData.length === 0) {
+                showNotification('Tidak ada data untuk diexport!', 'error');
+                return;
+            }
+            
+            let csvContent = 'No,Nama Siswa,Jenis,Sakitnya/Alasan,Tanggal Mulai,Lamanya (hari),Penanganan,Status\n';
+            
+            sakitData.forEach((data, index) => {
+                const tanggalMulai = new Date(data.tanggalMulai);
+                const tanggalSelesai = new Date(tanggalMulai);
+                tanggalSelesai.setDate(tanggalSelesai.getDate() + parseInt(data.lamanya) - 1);
+                
+                const today = new Date();
+                const isActive = today >= tanggalMulai && today <= tanggalSelesai;
+                const isFinished = today > tanggalSelesai;
+                
+                let status = '';
+                if (isActive) {
+                    status = 'Berlangsung';
+                } else if (isFinished) {
+                    status = 'Selesai';
+                } else {
+                    status = 'Akan Datang';
+                }
+                
+                csvContent += `${index + 1},"${data.nama}","${data.jenis}","${data.sakitnya}","${formatDate(data.tanggalMulai)}","${data.lamanya}","${data.penanganan}","${status}"\n`;
+            });
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Data_Sakit_Izin_${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showNotification('Data sakit/izin berhasil diexport!', 'success');
+        }
+
+        // Fungsi untuk hapus semua data sakit
+        function clearAllSakitData() {
+            if (confirm('Apakah Anda yakin ingin menghapus SEMUA data sakit/izin? Tindakan ini tidak dapat dibatalkan!')) {
+                sakitData = [];
+                localStorage.setItem('sakitData', JSON.stringify(sakitData));
+                displaySakitData();
+                showNotification('Semua data sakit/izin berhasil dihapus!', 'success');
+            }
+        }
+
+        // Fungsi untuk menampilkan data siswa alpa
+        function displayAlpaData() {
+            const tableBody = document.getElementById('alpaTableBody');
+            const emptyState = document.getElementById('emptyStateAlpa');
+            
+            // Filter data berdasarkan filter yang aktif
+            let filteredData = alpaData;
+            
+            const filterBulan = document.getElementById('filterBulanAlpa').value;
+            const searchNama = document.getElementById('searchNamaAlpa').value.toLowerCase();
+            const sortBy = document.getElementById('sortAlpa').value;
+            
+            if (filterBulan) {
+                filteredData = filteredData.filter(data => {
+                    const bulanData = data.tanggalAlpa.split('-')[1];
+                    return bulanData === filterBulan;
+                });
+            }
+            
+            if (searchNama) {
+                filteredData = filteredData.filter(data => 
+                    data.nama.toLowerCase().includes(searchNama)
+                );
+            }
+            
+            // Sorting
+            filteredData.sort((a, b) => {
+                switch(sortBy) {
+                    case 'terbaru':
+                        return new Date(b.tanggalAlpa) - new Date(a.tanggalAlpa);
+                    case 'terlama':
+                        return new Date(a.tanggalAlpa) - new Date(b.tanggalAlpa);
+                    case 'nama':
+                        return a.nama.localeCompare(b.nama);
+                    case 'lamanya':
+                        return parseInt(b.lamanya) - parseInt(a.lamanya);
+                    default:
+                        return 0;
+                }
+            });
+            
+            if (filteredData.length === 0) {
+                tableBody.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            
+            tableBody.innerHTML = filteredData.map((data, index) => {
+                const tanggalAlpa = new Date(data.tanggalAlpa);
+                const tanggalSelesai = new Date(tanggalAlpa);
+                tanggalSelesai.setDate(tanggalSelesai.getDate() + parseInt(data.lamanya) - 1);
+                
+                const today = new Date();
+                const isActive = today >= tanggalAlpa && today <= tanggalSelesai;
+                const isFinished = today > tanggalSelesai;
+                
+                let statusBadge = '';
+                if (isActive) {
+                    statusBadge = '<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">🔄 Berlangsung</span>';
+                } else if (isFinished) {
+                    statusBadge = '<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">✅ Selesai</span>';
+                } else {
+                    statusBadge = '<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">⏳ Akan Datang</span>';
+                }
+                
+                return `
+                    <tr class="hover:bg-gray-50">
+                        <td class="border border-gray-300 px-4 py-3">${index + 1}</td>
+                        <td class="border border-gray-300 px-4 py-3 font-medium">${data.nama}</td>
+                        <td class="border border-gray-300 px-4 py-3 text-center">${formatDate(data.tanggalAlpa)}</td>
+                        <td class="border border-gray-300 px-4 py-3 text-center">
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                ${data.lamanya} hari
+                            </span>
+                        </td>
+                        <td class="border border-gray-300 px-4 py-3">${data.penanganan}</td>
+                        <td class="border border-gray-300 px-4 py-3 text-center">${statusBadge}</td>
+                        <td class="border border-gray-300 px-4 py-3">
+                            <button onclick="deleteAlpaData(${alpaData.indexOf(data)})" 
+                                    class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition duration-200">
+                                🗑️ Hapus
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+            
+            updateAlpaStatistics();
+        }
+
+        // Fungsi untuk update statistik alpa
+        function updateAlpaStatistics() {
+            const totalAlpaCount = alpaData.length;
+            const uniqueStudents = [...new Set(alpaData.map(data => data.nama))].length;
+            
+            document.getElementById('totalAlpaCount').textContent = totalAlpaCount;
+            document.getElementById('siswaTerlibat').textContent = uniqueStudents;
+            
+            // Hitung rata-rata hari
+            if (alpaData.length > 0) {
+                const totalHari = alpaData.reduce((sum, data) => sum + parseInt(data.lamanya), 0);
+                const rataRata = Math.round(totalHari / alpaData.length);
+                document.getElementById('rataHariAlpa').textContent = rataRata;
+            } else {
+                document.getElementById('rataHariAlpa').textContent = '0';
+            }
+            
+            // Hitung data bulan ini
+            const currentMonth = new Date().getMonth() + 1;
+            const currentYear = new Date().getFullYear();
+            const bulanIniCount = alpaData.filter(data => {
+                const dataDate = new Date(data.tanggalAlpa);
+                return dataDate.getMonth() + 1 === currentMonth && dataDate.getFullYear() === currentYear;
+            }).length;
+            
+            document.getElementById('bulanIniAlpa').textContent = bulanIniCount;
+        }
+
+        // Fungsi untuk menghapus data alpa
+        function deleteAlpaData(index) {
+            if (confirm('Apakah Anda yakin ingin menghapus data alpa ini?')) {
+                alpaData.splice(index, 1);
+                localStorage.setItem('alpaData', JSON.stringify(alpaData));
+                displayAlpaData();
+                showNotification('Data alpa berhasil dihapus!', 'success');
+            }
+        }
+
+        // Fungsi untuk export data alpa
+        function exportAlpaData() {
+            if (alpaData.length === 0) {
+                showNotification('Tidak ada data untuk diexport!', 'error');
+                return;
+            }
+            
+            let csvContent = 'No,Nama Siswa,Tanggal Alpa,Lamanya (hari),Penanganan,Status\n';
+            
+            alpaData.forEach((data, index) => {
+                const tanggalAlpa = new Date(data.tanggalAlpa);
+                const tanggalSelesai = new Date(tanggalAlpa);
+                tanggalSelesai.setDate(tanggalSelesai.getDate() + parseInt(data.lamanya) - 1);
+                
+                const today = new Date();
+                const isActive = today >= tanggalAlpa && today <= tanggalSelesai;
+                const isFinished = today > tanggalSelesai;
+                
+                let status = '';
+                if (isActive) {
+                    status = 'Berlangsung';
+                } else if (isFinished) {
+                    status = 'Selesai';
+                } else {
+                    status = 'Akan Datang';
+                }
+                
+                csvContent += `${index + 1},"${data.nama}","${formatDate(data.tanggalAlpa)}","${data.lamanya}","${data.penanganan}","${status}"\n`;
+            });
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Data_Alpa_${new Date().toISOString().split('T')[0]}.csv`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showNotification('Data alpa berhasil diexport!', 'success');
+        }
+
+        // Fungsi untuk hapus semua data alpa
+        function clearAllAlpaData() {
+            if (confirm('Apakah Anda yakin ingin menghapus SEMUA data alpa? Tindakan ini tidak dapat dibatalkan!')) {
+                alpaData = [];
+                localStorage.setItem('alpaData', JSON.stringify(alpaData));
+                displayAlpaData();
+                showNotification('Semua data alpa berhasil dihapus!', 'success');
+            }
+        }
+
+        // Fungsi untuk generate laporan alpa
+        function generateAlpaReport() {
+            if (alpaData.length === 0) {
+                showNotification('Tidak ada data untuk membuat laporan!', 'error');
+                return;
+            }
+            
+            const totalAlpa = alpaData.length;
+            const uniqueStudents = [...new Set(alpaData.map(data => data.nama))];
+            const totalHari = alpaData.reduce((sum, data) => sum + parseInt(data.lamanya), 0);
+            const rataRata = Math.round(totalHari / totalAlpa);
+            
+            // Siswa dengan alpa terbanyak
+            const studentCount = {};
+            alpaData.forEach(data => {
+                studentCount[data.nama] = (studentCount[data.nama] || 0) + 1;
+            });
+            
+            const topOffender = Object.entries(studentCount)
+                .sort(([,a], [,b]) => b - a)[0];
+            
+            const report = `
+LAPORAN SISWA ALPA
+==================
+
+📊 RINGKASAN:
+- Total Kasus Alpa: ${totalAlpa} kasus
+- Jumlah Siswa Terlibat: ${uniqueStudents.length} siswa
+- Total Hari Alpa: ${totalHari} hari
+- Rata-rata per Kasus: ${rataRata} hari
+
+👥 SISWA DENGAN ALPA TERBANYAK:
+- ${topOffender ? topOffender[0] + ' (' + topOffender[1] + ' kasus)' : 'Tidak ada data'}
+
+📋 DETAIL KASUS:
+${alpaData.map((data, index) => 
+`${index + 1}. ${data.nama}
+   Tanggal: ${formatDate(data.tanggalAlpa)}
+   Durasi: ${data.lamanya} hari
+   Penanganan: ${data.penanganan}
+`).join('\n')}
+
+📅 Tanggal Laporan: ${new Date().toLocaleDateString('id-ID')}
+⏰ Waktu: ${new Date().toLocaleTimeString('id-ID')}
+            `.trim();
+            
+            // Buat file dan download
+            const blob = new Blob([report], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Laporan_Alpa_${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showNotification('Laporan alpa berhasil dibuat!', 'success');
+        }
+
+        // Fungsi untuk menampilkan data siswa pindah
+        function displayPindahData() {
+            const tableBody = document.getElementById('pindahTableBody');
+            const emptyState = document.getElementById('emptyStatePindah');
+            
+            if (pindahData.length === 0) {
+                tableBody.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            
+            tableBody.innerHTML = pindahData.map((data, index) => `
+                <tr class="hover:bg-gray-50">
+                    <td class="border border-gray-300 px-4 py-3">${index + 1}</td>
+                    <td class="border border-gray-300 px-4 py-3 font-medium">${data.nama}</td>
+                    <td class="border border-gray-300 px-4 py-3">${formatDate(data.tanggal)}</td>
+                    <td class="border border-gray-300 px-4 py-3">
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                            data.alasan === 'Pindah Masuk' ? 'bg-green-100 text-green-800' :
+                            data.alasan === 'Pindah Keluar' ? 'bg-red-100 text-red-800' :
+                            data.alasan === 'Mengundurkan Diri' ? 'bg-yellow-100 text-yellow-800' :
+                            'bg-blue-100 text-blue-800'
+                        }">
+                            ${data.alasan === 'Pindah Masuk' ? '📥' : 
+                              data.alasan === 'Pindah Keluar' ? '📤' :
+                              data.alasan === 'Mengundurkan Diri' ? '🚪' : '🎓'} ${data.alasan}
+                        </span>
+                    </td>
+                    <td class="border border-gray-300 px-4 py-3">${data.sekolah}</td>
+                    <td class="border border-gray-300 px-4 py-3">
+                        <button onclick="deletePindahData(${index})" 
+                                class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition duration-200">
+                            🗑️ Hapus
+                        </button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Fungsi untuk menghapus siswa
+        function deleteStudent(index) {
+            if (confirm('Apakah Anda yakin ingin menghapus data siswa ini?')) {
+                students.splice(index, 1);
+                localStorage.setItem('studentsData', JSON.stringify(students));
+                displayStudents();
+                updateKeadaanSiswa();
+                showNotification('Data siswa berhasil dihapus!', 'success');
+            }
+        }
+
+        // Fungsi untuk menghapus data pindah
+        function deletePindahData(index) {
+            if (confirm('Apakah Anda yakin ingin menghapus data pindah ini?')) {
+                pindahData.splice(index, 1);
+                localStorage.setItem('pindahData', JSON.stringify(pindahData));
+                displayPindahData();
+                showNotification('Data pindah berhasil dihapus!', 'success');
+            }
+        }
+
+        // Fungsi untuk menampilkan notifikasi
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 ${
+                type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+            }`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Fungsi untuk update keadaan siswa
+        function updateKeadaanSiswa() {
+            const lakiLaki = students.filter(s => s.jenisKelamin === 'Laki-laki').length;
+            const perempuan = students.filter(s => s.jenisKelamin === 'Perempuan').length;
+            const total = students.length;
+            
+            // Update data siswa
+            document.getElementById('dataSiswaL').textContent = lakiLaki;
+            document.getElementById('dataSiswaP').textContent = perempuan;
+            document.getElementById('dataSiswaTotal').textContent = total;
+            
+            // Update data agama
+            const islamL = students.filter(s => s.jenisKelamin === 'Laki-laki' && s.agama === 'Islam').length;
+            const islamP = students.filter(s => s.jenisKelamin === 'Perempuan' && s.agama === 'Islam').length;
+            const nonMuslimL = students.filter(s => s.jenisKelamin === 'Laki-laki' && s.agama !== 'Islam').length;
+            const nonMuslimP = students.filter(s => s.jenisKelamin === 'Perempuan' && s.agama !== 'Islam').length;
+            
+            document.getElementById('islamL').textContent = islamL;
+            document.getElementById('islamP').textContent = islamP;
+            document.getElementById('islamTotal').textContent = islamL + islamP;
+            document.getElementById('nonMuslimL').textContent = nonMuslimL;
+            document.getElementById('nonMuslimP').textContent = nonMuslimP;
+            document.getElementById('nonMuslimTotal').textContent = nonMuslimL + nonMuslimP;
+            
+            // Update total mutasi
+            updateMutasiTotals();
+            
+            // Update statistik keseluruhan
+            updateStatistikKeseluruhan();
+        }
+        
+        // Fungsi untuk update statistik keseluruhan
+        function updateStatistikKeseluruhan() {
+            const lakiLaki = students.filter(s => s.jenisKelamin === 'Laki-laki').length;
+            const perempuan = students.filter(s => s.jenisKelamin === 'Perempuan').length;
+            const total = students.length;
+            
+            // Update card statistik
+            document.getElementById('totalSiswaKeseluruhan').textContent = total;
+            document.getElementById('totalLakiLaki').textContent = lakiLaki;
+            document.getElementById('totalPerempuan').textContent = perempuan;
+            
+            // Hitung rata-rata usia
+            if (total > 0) {
+                const totalUsia = students.reduce((sum, student) => sum + student.usia, 0);
+                const rataRata = Math.round(totalUsia / total);
+                document.getElementById('rataRataUsia').textContent = rataRata;
+            } else {
+                document.getElementById('rataRataUsia').textContent = '0';
+            }
+            
+            // Update tabel detail
+            document.getElementById('detailLakiLaki').textContent = lakiLaki;
+            document.getElementById('detailPerempuan').textContent = perempuan;
+            document.getElementById('detailTotal').textContent = total;
+            
+            // Update data agama
+            const islamL = students.filter(s => s.jenisKelamin === 'Laki-laki' && s.agama === 'Islam').length;
+            const islamP = students.filter(s => s.jenisKelamin === 'Perempuan' && s.agama === 'Islam').length;
+            const islamTotal = islamL + islamP;
+            const nonMuslimL = students.filter(s => s.jenisKelamin === 'Laki-laki' && s.agama !== 'Islam').length;
+            const nonMuslimP = students.filter(s => s.jenisKelamin === 'Perempuan' && s.agama !== 'Islam').length;
+            const nonMuslimTotal = nonMuslimL + nonMuslimP;
+            
+            document.getElementById('detailIslamL').textContent = islamL;
+            document.getElementById('detailIslamP').textContent = islamP;
+            document.getElementById('detailIslamTotal').textContent = islamTotal;
+            document.getElementById('detailNonMuslimL').textContent = nonMuslimL;
+            document.getElementById('detailNonMuslimP').textContent = nonMuslimP;
+            document.getElementById('detailNonMuslimTotal').textContent = nonMuslimTotal;
+            
+            // Hitung persentase
+            if (total > 0) {
+                const persenIslam = Math.round((islamTotal / total) * 100);
+                const persenNonMuslim = Math.round((nonMuslimTotal / total) * 100);
+                const persenLakiLaki = Math.round((lakiLaki / total) * 100);
+                const persenPerempuan = Math.round((perempuan / total) * 100);
+                
+                document.getElementById('detailIslamPersen').textContent = persenIslam + '%';
+                document.getElementById('detailNonMuslimPersen').textContent = persenNonMuslim + '%';
+                document.getElementById('persenLakiLaki').textContent = persenLakiLaki + '%';
+                document.getElementById('persenPerempuan').textContent = persenPerempuan + '%';
+                
+                // Update grafik bar
+                document.getElementById('barLakiLaki').style.width = persenLakiLaki + '%';
+                document.getElementById('barPerempuan').style.width = persenPerempuan + '%';
+            } else {
+                document.getElementById('detailIslamPersen').textContent = '0%';
+                document.getElementById('detailNonMuslimPersen').textContent = '0%';
+                document.getElementById('persenLakiLaki').textContent = '0%';
+                document.getElementById('persenPerempuan').textContent = '0%';
+                document.getElementById('barLakiLaki').style.width = '0%';
+                document.getElementById('barPerempuan').style.width = '0%';
+            }
+        }
+        
+        // Fungsi untuk refresh statistik
+        function refreshStatistics() {
+            updateStatistikKeseluruhan();
+            showNotification('Statistik berhasil diperbarui!', 'success');
+        }
+        
+        // Fungsi untuk export ringkasan
+        function exportSummary() {
+            const total = students.length;
+            const lakiLaki = students.filter(s => s.jenisKelamin === 'Laki-laki').length;
+            const perempuan = students.filter(s => s.jenisKelamin === 'Perempuan').length;
+            const islamTotal = students.filter(s => s.agama === 'Islam').length;
+            const nonMuslimTotal = students.filter(s => s.agama !== 'Islam').length;
+            
+            let rataRataUsia = 0;
+            if (total > 0) {
+                const totalUsia = students.reduce((sum, student) => sum + student.usia, 0);
+                rataRataUsia = Math.round(totalUsia / total);
+            }
+            
+            const summary = `
+RINGKASAN DATA SISWA
+====================
+
+📊 STATISTIK UMUM:
+- Total Siswa: ${total} orang
+- Laki-laki: ${lakiLaki} orang (${total > 0 ? Math.round((lakiLaki/total)*100) : 0}%)
+- Perempuan: ${perempuan} orang (${total > 0 ? Math.round((perempuan/total)*100) : 0}%)
+- Rata-rata Usia: ${rataRataUsia} tahun
+
+🕌 BERDASARKAN AGAMA:
+- Islam: ${islamTotal} orang (${total > 0 ? Math.round((islamTotal/total)*100) : 0}%)
+- Non Muslim: ${nonMuslimTotal} orang (${total > 0 ? Math.round((nonMuslimTotal/total)*100) : 0}%)
+
+📅 Tanggal Export: ${new Date().toLocaleDateString('id-ID')}
+⏰ Waktu Export: ${new Date().toLocaleTimeString('id-ID')}
+            `.trim();
+            
+            // Buat file dan download
+            const blob = new Blob([summary], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Ringkasan_Siswa_${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+            
+            showNotification('Ringkasan berhasil diexport!', 'success');
+        }
+        
+        // Fungsi untuk update total mutasi
+        function updateMutasiTotals() {
+            const mutasiMasukL = parseInt(document.getElementById('mutasiMasukL').value) || 0;
+            const mutasiMasukP = parseInt(document.getElementById('mutasiMasukP').value) || 0;
+            document.getElementById('mutasiMasukTotal').textContent = mutasiMasukL + mutasiMasukP;
+            
+            const mutasiKeluarL = parseInt(document.getElementById('mutasiKeluarL').value) || 0;
+            const mutasiKeluarP = parseInt(document.getElementById('mutasiKeluarP').value) || 0;
+            document.getElementById('mutasiKeluarTotal').textContent = mutasiKeluarL + mutasiKeluarP;
+            
+            const mundurDiriL = parseInt(document.getElementById('mundurDiriL').value) || 0;
+            const mundurDiriP = parseInt(document.getElementById('mundurDiriP').value) || 0;
+            document.getElementById('mundurDiriTotal').textContent = mundurDiriL + mundurDiriP;
+        }
+        
+        // Fungsi untuk simpan keadaan siswa
+        function saveKeadaanSiswa() {
+            const keadaanData = {
+                mutasiMasuk: {
+                    lakiLaki: parseInt(document.getElementById('mutasiMasukL').value) || 0,
+                    perempuan: parseInt(document.getElementById('mutasiMasukP').value) || 0,
+                    keterangan: document.getElementById('mutasiMasukKet').value
+                },
+                mutasiKeluar: {
+                    lakiLaki: parseInt(document.getElementById('mutasiKeluarL').value) || 0,
+                    perempuan: parseInt(document.getElementById('mutasiKeluarP').value) || 0,
+                    keterangan: document.getElementById('mutasiKeluarKet').value
+                },
+                mundurDiri: {
+                    lakiLaki: parseInt(document.getElementById('mundurDiriL').value) || 0,
+                    perempuan: parseInt(document.getElementById('mundurDiriP').value) || 0,
+                    keterangan: document.getElementById('mundurDiriKet').value
+                }
+            };
+            
+            localStorage.setItem('keadaanSiswaData', JSON.stringify(keadaanData));
+            showNotification('Data keadaan siswa berhasil disimpan!', 'success');
+        }
+        
+        // Load data keadaan siswa
+        function loadKeadaanSiswa() {
+            const savedData = JSON.parse(localStorage.getItem('keadaanSiswaData'));
+            if (savedData) {
+                document.getElementById('mutasiMasukL').value = savedData.mutasiMasuk.lakiLaki;
+                document.getElementById('mutasiMasukP').value = savedData.mutasiMasuk.perempuan;
+                document.getElementById('mutasiMasukKet').value = savedData.mutasiMasuk.keterangan;
+                
+                document.getElementById('mutasiKeluarL').value = savedData.mutasiKeluar.lakiLaki;
+                document.getElementById('mutasiKeluarP').value = savedData.mutasiKeluar.perempuan;
+                document.getElementById('mutasiKeluarKet').value = savedData.mutasiKeluar.keterangan;
+                
+                document.getElementById('mundurDiriL').value = savedData.mundurDiri.lakiLaki;
+                document.getElementById('mundurDiriP').value = savedData.mundurDiri.perempuan;
+                document.getElementById('mundurDiriKet').value = savedData.mundurDiri.keterangan;
+            }
+        }
+
+        // Event listener untuk form
+        document.getElementById('studentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nisn = document.getElementById('nisn').value;
+            const nama = document.getElementById('nama').value;
+            const jenisKelamin = document.getElementById('jenisKelamin').value;
+            const tanggalLahir = document.getElementById('tanggalLahir').value;
+            const agama = document.getElementById('agama').value;
+            
+            // Validasi NISN unik
+            if (students.some(student => student.nisn === nisn)) {
+                showNotification('NISN sudah terdaftar! Gunakan NISN yang berbeda.', 'error');
+                return;
+            }
+            
+            const usia = calculateAge(tanggalLahir);
+            
+            const newStudent = {
+                nisn,
+                nama,
+                jenisKelamin,
+                tanggalLahir,
+                usia,
+                agama
+            };
+            
+            students.push(newStudent);
+            localStorage.setItem('studentsData', JSON.stringify(students));
+            
+            // Kirim ke Google Sheets jika terhubung
+            if (isConnected && googleSheetsUrl) {
+                const rowData = [nisn, nama, jenisKelamin, tanggalLahir, usia, agama, new Date().toISOString()];
+                sendToGoogleSheets('DataSiswa', rowData, 'add').then(success => {
+                    if (success) {
+                        showNotification('Data siswa berhasil ditambahkan dan disimpan ke Google Sheets!', 'success');
+                    } else {
+                        showNotification('Data siswa berhasil ditambahkan (tersimpan lokal)', 'success');
+                    }
+                });
+            } else {
+                showNotification('Data siswa berhasil ditambahkan (tersimpan lokal)', 'success');
+            }
+            
+            // Reset form
+            this.reset();
+            
+            // Update tampilan
+            displayStudents();
+            populateStudentDropdown();
+            updateKeadaanSiswa();
+        });
+
+        // Event listener untuk form sakit/izin
+        document.getElementById('sakitForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nama = document.getElementById('namaSiswa').value;
+            const jenis = document.getElementById('jenisSakit').value;
+            const sakitnya = document.getElementById('sakitnya').value;
+            const tanggalMulai = document.getElementById('tanggalMulai').value;
+            const lamanya = document.getElementById('lamanya').value;
+            const penanganan = document.getElementById('penanganan').value;
+            
+            // Validasi tanggal tidak boleh masa lalu lebih dari 30 hari
+            const today = new Date();
+            const inputDate = new Date(tanggalMulai);
+            const diffTime = today - inputDate;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays > 30) {
+                showNotification('Tanggal tidak boleh lebih dari 30 hari yang lalu!', 'error');
+                return;
+            }
+            
+            const newSakitData = {
+                nama,
+                jenis,
+                sakitnya,
+                tanggalMulai,
+                lamanya: parseInt(lamanya),
+                penanganan,
+                tanggalInput: new Date().toISOString()
+            };
+            
+            sakitData.push(newSakitData);
+            localStorage.setItem('sakitData', JSON.stringify(sakitData));
+            
+            // Kirim ke Google Sheets jika terhubung
+            if (isConnected && googleSheetsUrl) {
+                const rowData = [nama, jenis, sakitnya, tanggalMulai, parseInt(lamanya), penanganan, new Date().toISOString()];
+                sendToGoogleSheets('DataSakit', rowData, 'add').then(success => {
+                    if (success) {
+                        showNotification(`Data ${jenis.toLowerCase()} berhasil ditambahkan dan disimpan ke Google Sheets!`, 'success');
+                    } else {
+                        showNotification(`Data ${jenis.toLowerCase()} berhasil ditambahkan (tersimpan lokal)`, 'success');
+                    }
+                });
+            } else {
+                showNotification(`Data ${jenis.toLowerCase()} berhasil ditambahkan (tersimpan lokal)`, 'success');
+            }
+            
+            // Reset form
+            this.reset();
+            
+            // Update tampilan
+            displaySakitData();
+        });
+
+        // Event listener untuk form pindah
+        document.getElementById('pindahForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nama = document.getElementById('namaPindah').value;
+            const tanggal = document.getElementById('tanggalPindah').value;
+            const alasan = document.getElementById('alasanPindah').value;
+            const sekolah = document.getElementById('sekolahTujuan').value;
+            
+            const newPindahData = {
+                nama,
+                tanggal,
+                alasan,
+                sekolah
+            };
+            
+            pindahData.push(newPindahData);
+            localStorage.setItem('pindahData', JSON.stringify(pindahData));
+            
+            // Kirim ke Google Sheets jika terhubung
+            if (isConnected && googleSheetsUrl) {
+                const rowData = [nama, tanggal, alasan, sekolah, new Date().toISOString()];
+                sendToGoogleSheets('DataPindah', rowData, 'add').then(success => {
+                    if (success) {
+                        showNotification('Data pindah berhasil ditambahkan dan disimpan ke Google Sheets!', 'success');
+                    } else {
+                        showNotification('Data pindah berhasil ditambahkan (tersimpan lokal)', 'success');
+                    }
+                });
+            } else {
+                showNotification('Data pindah berhasil ditambahkan (tersimpan lokal)', 'success');
+            }
+            
+            // Reset form
+            this.reset();
+            
+            // Update tampilan
+            displayPindahData();
+        });
+
+        // Event listener untuk form alpa
+        document.getElementById('alpaForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nama = document.getElementById('namaSiswaAlpa').value;
+            const tanggalAlpa = document.getElementById('tanggalAlpa').value;
+            const lamanya = document.getElementById('lamanyaAlpa').value;
+            const penanganan = document.getElementById('penangananAlpa').value;
+            
+            // Validasi tanggal tidak boleh masa lalu lebih dari 30 hari
+            const today = new Date();
+            const inputDate = new Date(tanggalAlpa);
+            const diffTime = today - inputDate;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays > 30) {
+                showNotification('Tanggal tidak boleh lebih dari 30 hari yang lalu!', 'error');
+                return;
+            }
+            
+            const newAlpaData = {
+                nama,
+                tanggalAlpa,
+                lamanya: parseInt(lamanya),
+                penanganan,
+                tanggalInput: new Date().toISOString()
+            };
+            
+            alpaData.push(newAlpaData);
+            localStorage.setItem('alpaData', JSON.stringify(alpaData));
+            
+            // Kirim ke Google Sheets jika terhubung
+            if (isConnected && googleSheetsUrl) {
+                const rowData = [nama, tanggalAlpa, parseInt(lamanya), penanganan, new Date().toISOString()];
+                sendToGoogleSheets('DataAlpa', rowData, 'add').then(success => {
+                    if (success) {
+                        showNotification('Data alpa berhasil ditambahkan dan disimpan ke Google Sheets!', 'success');
+                    } else {
+                        showNotification('Data alpa berhasil ditambahkan (tersimpan lokal)', 'success');
+                    }
+                });
+            } else {
+                showNotification('Data alpa berhasil ditambahkan (tersimpan lokal)', 'success');
+            }
+            
+            // Reset form
+            this.reset();
+            
+            // Update tampilan
+            displayAlpaData();
+        });
+
+        // Event listeners untuk input mutasi
+        document.getElementById('mutasiMasukL').addEventListener('input', updateMutasiTotals);
+        document.getElementById('mutasiMasukP').addEventListener('input', updateMutasiTotals);
+        document.getElementById('mutasiKeluarL').addEventListener('input', updateMutasiTotals);
+        document.getElementById('mutasiKeluarP').addEventListener('input', updateMutasiTotals);
+        document.getElementById('mundurDiriL').addEventListener('input', updateMutasiTotals);
+        document.getElementById('mundurDiriP').addEventListener('input', updateMutasiTotals);
+
+        // Fungsi untuk menghitung persentase absensi
+        function calculateAbsensiPercentage() {
+            const hadir = parseInt(document.getElementById('hadirJumlah').value) || 0;
+            const sakit = parseInt(document.getElementById('sakitJumlah').value) || 0;
+            const izin = parseInt(document.getElementById('izinJumlah').value) || 0;
+            const alfa = parseInt(document.getElementById('alfaJumlah').value) || 0;
+            
+            const total = hadir + sakit + izin + alfa;
+            
+            // Update total
+            document.getElementById('totalJumlah').textContent = total;
+            
+            // Hitung persentase
+            if (total > 0) {
+                document.getElementById('hadirPersen').textContent = Math.round((hadir / total) * 100) + '%';
+                document.getElementById('sakitPersen').textContent = Math.round((sakit / total) * 100) + '%';
+                document.getElementById('izinPersen').textContent = Math.round((izin / total) * 100) + '%';
+                document.getElementById('alfaPersen').textContent = Math.round((alfa / total) * 100) + '%';
+            } else {
+                document.getElementById('hadirPersen').textContent = '0%';
+                document.getElementById('sakitPersen').textContent = '0%';
+                document.getElementById('izinPersen').textContent = '0%';
+                document.getElementById('alfaPersen').textContent = '0%';
+            }
+        }
+        
+        // Fungsi untuk update info periode
+        function updateInfoPeriode() {
+            const bulan = document.getElementById('bulanAbsensi').value;
+            const tahun = document.getElementById('tahunAbsensi').value;
+            const minggu = document.getElementById('mingguAbsensi').value;
+            
+            const namaBulan = [
+                '', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+            ];
+            
+            const namaMinggu = [
+                '', 'Minggu Pertama', 'Minggu Kedua', 'Minggu Ketiga', 'Minggu Keempat', 'Minggu Kelima'
+            ];
+            
+            document.getElementById('infoPeriode').textContent = 
+                `${namaBulan[parseInt(bulan)]} ${tahun} - ${namaMinggu[parseInt(minggu)]}`;
+        }
+        
+        // Fungsi untuk simpan data absensi
+        function saveAbsensi() {
+            const bulan = document.getElementById('bulanAbsensi').value;
+            const tahun = document.getElementById('tahunAbsensi').value;
+            const minggu = document.getElementById('mingguAbsensi').value;
+            
+            const key = `${tahun}-${bulan}-${minggu}`;
+            
+            const hadirJumlah = parseInt(document.getElementById('hadirJumlah').value) || 0;
+            const sakitJumlah = parseInt(document.getElementById('sakitJumlah').value) || 0;
+            const izinJumlah = parseInt(document.getElementById('izinJumlah').value) || 0;
+            const alfaJumlah = parseInt(document.getElementById('alfaJumlah').value) || 0;
+            const total = hadirJumlah + sakitJumlah + izinJumlah + alfaJumlah;
+            
+            const data = {
+                hadir: {
+                    jumlah: hadirJumlah,
+                    keterangan: document.getElementById('hadirKet').value
+                },
+                sakit: {
+                    jumlah: sakitJumlah,
+                    keterangan: document.getElementById('sakitKet').value
+                },
+                izin: {
+                    jumlah: izinJumlah,
+                    keterangan: document.getElementById('izinKet').value
+                },
+                alfa: {
+                    jumlah: alfaJumlah,
+                    keterangan: document.getElementById('alfaKet').value
+                }
+            };
+            
+            absensiData[key] = data;
+            localStorage.setItem('absensiData', JSON.stringify(absensiData));
+            
+            // Kirim ke Google Sheets jika terhubung
+            if (isConnected && googleSheetsUrl) {
+                const rowData = [key, hadirJumlah, sakitJumlah, izinJumlah, alfaJumlah, total, new Date().toISOString()];
+                sendToGoogleSheets('DataAbsensi', rowData, 'add').then(success => {
+                    if (success) {
+                        showNotification('Data absensi berhasil disimpan dan disinkronisasi ke Google Sheets!', 'success');
+                    } else {
+                        showNotification('Data absensi berhasil disimpan (tersimpan lokal)', 'success');
+                    }
+                });
+            } else {
+                showNotification('Data absensi berhasil disimpan (tersimpan lokal)', 'success');
+            }
+        }
+        
+        // Fungsi untuk load data absensi
+        function loadAbsensi() {
+            const bulan = document.getElementById('bulanAbsensi').value;
+            const tahun = document.getElementById('tahunAbsensi').value;
+            const minggu = document.getElementById('mingguAbsensi').value;
+            
+            const key = `${tahun}-${bulan}-${minggu}`;
+            const data = absensiData[key];
+            
+            if (data) {
+                document.getElementById('hadirJumlah').value = data.hadir.jumlah;
+                document.getElementById('hadirKet').value = data.hadir.keterangan;
+                
+                document.getElementById('sakitJumlah').value = data.sakit.jumlah;
+                document.getElementById('sakitKet').value = data.sakit.keterangan;
+                
+                document.getElementById('izinJumlah').value = data.izin.jumlah;
+                document.getElementById('izinKet').value = data.izin.keterangan;
+                
+                document.getElementById('alfaJumlah').value = data.alfa.jumlah;
+                document.getElementById('alfaKet').value = data.alfa.keterangan;
+                
+                calculateAbsensiPercentage();
+                showNotification('Data absensi berhasil dimuat!', 'success');
+            } else {
+                showNotification('Tidak ada data untuk periode ini!', 'error');
+            }
+        }
+        
+        // Fungsi untuk reset data absensi
+        function resetAbsensi() {
+            if (confirm('Apakah Anda yakin ingin mereset semua data absensi?')) {
+                document.getElementById('hadirJumlah').value = 0;
+                document.getElementById('hadirKet').value = '';
+                
+                document.getElementById('sakitJumlah').value = 0;
+                document.getElementById('sakitKet').value = '';
+                
+                document.getElementById('izinJumlah').value = 0;
+                document.getElementById('izinKet').value = '';
+                
+                document.getElementById('alfaJumlah').value = 0;
+                document.getElementById('alfaKet').value = '';
+                
+                calculateAbsensiPercentage();
+                showNotification('Data absensi berhasil direset!', 'success');
+            }
+        }
+
+        // Event listeners untuk absensi
+        document.getElementById('hadirJumlah').addEventListener('input', calculateAbsensiPercentage);
+        document.getElementById('sakitJumlah').addEventListener('input', calculateAbsensiPercentage);
+        document.getElementById('izinJumlah').addEventListener('input', calculateAbsensiPercentage);
+        document.getElementById('alfaJumlah').addEventListener('input', calculateAbsensiPercentage);
+        
+        document.getElementById('bulanAbsensi').addEventListener('change', updateInfoPeriode);
+        document.getElementById('tahunAbsensi').addEventListener('change', updateInfoPeriode);
+        document.getElementById('mingguAbsensi').addEventListener('change', updateInfoPeriode);
+        
+        // Event listeners untuk filter sakit/izin
+        document.getElementById('filterJenis').addEventListener('change', displaySakitData);
+        document.getElementById('filterBulan').addEventListener('change', displaySakitData);
+        document.getElementById('searchNama').addEventListener('input', displaySakitData);
+        
+        // Event listeners untuk filter alpa
+        document.getElementById('filterBulanAlpa').addEventListener('change', displayAlpaData);
+        document.getElementById('searchNamaAlpa').addEventListener('input', displayAlpaData);
+        document.getElementById('sortAlpa').addEventListener('change', displayAlpaData);
+
+        // Load konfigurasi Google Sheets saat startup
+        function loadGoogleSheetsConfig() {
+            if (googleSheetsUrl) {
+                document.getElementById('googleSheetsUrl').value = googleSheetsUrl;
+                // Auto test connection jika URL sudah ada
+                testConnection();
+            }
+        }
+
+        // Tampilkan data saat halaman dimuat
+        displayStudents();
+        displayPindahData();
+        displaySakitData();
+        displayAlpaData();
+        populateStudentDropdown();
+        updateKeadaanSiswa();
+        loadKeadaanSiswa();
+        calculateAbsensiPercentage();
+        updateInfoPeriode();
+        updateStatistikKeseluruhan();
+        loadGoogleSheetsConfig();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98a2800734a5e708',t:'MTc1OTcyNTgzMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
